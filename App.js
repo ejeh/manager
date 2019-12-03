@@ -1,26 +1,29 @@
-
 //import liraries
-import React from 'react';
-import { View } from 'react-native';
-import { Provider } from "react-redux";
-import { createStore } from "redux";
+import React, {Component} from 'react';
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import firebase from './firebase';
+import ReduxThunk from 'redux-thunk';
 import reducers from './src/reducers';
-import { Header } from "./src/components/common";
-import LibraryList from "./src/components/LibraryList";
-
+import Router from './src/Router';
 
 // create a component
-const App = () => {
-  return (
-    <Provider store={createStore(reducers)}>
-      <View style={{ flex: 1 }}>
-        <Header headerText="Tech Stack" />
-        <LibraryList />
-      </View>
-    </Provider>
-  );
-};
+class App extends Component {
+  componentWIllMount() {
+    // Your web app's Firebase configuration
+    firebase;
+  }
+
+  render() {
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+
+    return (
+      <Provider store={store}>
+        <Router />
+      </Provider>
+    );
+  }
+}
 
 //make this component available to the app
 export default App;
-

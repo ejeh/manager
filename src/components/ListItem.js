@@ -1,63 +1,31 @@
-//import liraries
-import React, { Component } from 'react';
-import { 
-    View, 
-    Text, 
-    StyleSheet, 
-    TouchableWithoutFeedback,
-    LayoutAnimation,
-    NativeModules
- } from 'react-native';
-import { CardSection } from "./common";
-import { connect } from "react-redux";
-import * as actions from "../actions";
+import React, {Component} from 'react';
+import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import {CardSection} from './common';
+import {Text} from 'react-native';
+import {Actions} from 'react-native-router-flux';
 
-// create a component
 class ListItem extends Component {
-    componentDidUpdate(){
-       const { UIManager } = NativeModules
-       UIManager.setLayoutAnimationEnabledExperimental &&
-       UIManager.setLayoutAnimationEnabledExperimental(true)
-       LayoutAnimation.spring()
-    }
-    renderDescription(){
-        const { library, expanded } = this.props
-        if(expanded){
-            return (
-                <CardSection>
-                    <Text style={{ flex: 1}}>{library.description}</Text>
-                </CardSection>
-            )
-        }
-    }
-    render() {
-        const { titleStyle } = styles
-        const { id, title } = this.props.library
-        return (
-            <TouchableWithoutFeedback onPress={() => this.props.selectLibrary(id)}>
-                <View>
-                    <CardSection>
-                        <Text style={titleStyle}>{title}</Text>
-                    </CardSection>
-                    {this.renderDescription()}
-                </View>
-            </TouchableWithoutFeedback>
-        );
-    }
+  onRowPress() {
+    Actions._employeeEdit({employee: this.props.employee.item});
+  }
+  render() {
+    const {name} = this.props.employee.item;
+    return (
+      <TouchableWithoutFeedback onPress={this.onRowPress.bind(this)}>
+        <View>
+          <CardSection>
+            <Text style={styles.titleStyle}>{name}</Text>
+          </CardSection>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    titleStyle: {
-        fontSize: 18,
-        paddingLeft: 15
-    }
-})
-
-const mapStateToProps = (state, ownProps) => {
-    const expanded = state.selectedLibraryId === ownProps.library.id
-    return { expanded }
-}
-
-//make this component available to the app
-export default connect(mapStateToProps, actions )(ListItem);
- 
+  titleStyle: {
+    fontSize: 18,
+    paddingLeft: 15,
+  },
+});
+export default ListItem;
